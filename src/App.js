@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './App.css';
 
 const App = () => {
   const [locations, setLocations] = useState([]);
@@ -152,94 +153,106 @@ const App = () => {
   };
 
   return (
-    <div className="App">
+    <div className="app-container">
       <h1>Location and Aircraft Management</h1>
 
       {/* Display Locations */}
-      <h2>Locations</h2>
-      <ul>
-        {locations.map((location) => (
-          <li key={location.id}>
-            {location.id}: {location.name}
-            <button onClick={() => handleDeleteLocation(location.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <div className="section">
+        <h2>Locations</h2>
+        <ul>
+          {locations.map((location) => (
+            <li key={location.id}>
+              {location.id}: {location.name}
+              <button className="delete-btn" onClick={() => handleDeleteLocation(location.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {/* Add New Location */}
-      <h2>Add Location</h2>
-      <input
-        type="text"
-        placeholder="Location ID"
-        value={idLocation}
-        onChange={(e) => setIdLocation(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Location Name"
-        value={nameLocation}
-        onChange={(e) => setNameLocation(e.target.value)}
-      />
-      <button onClick={handleAddLocation}>Add Location</button>
+      <div className="section">
+        <h2>Add Location</h2>
+        <input
+          type="text"
+          placeholder="Location ID"
+          value={idLocation}
+          onChange={(e) => setIdLocation(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Location Name"
+          value={nameLocation}
+          onChange={(e) => setNameLocation(e.target.value)}
+        />
+        <button className="btn" onClick={handleAddLocation}>Add Location</button>
+      </div>
 
       {/* Update Location */}
-      <h2>Update Location</h2>
-      <input
-        type="text"
-        placeholder="Location ID"
-        value={updateIdLocation}
-        onChange={(e) => setUpdateIdLocation(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="New Location Name"
-        value={updateNameLocation}
-        onChange={(e) => setUpdateNameLocation(e.target.value)}
-      />
-      <button onClick={handleUpdateLocation}>Update Location</button>
+      <div className="section">
+        <h2>Update Location</h2>
+        <input
+          type="text"
+          placeholder="Location ID"
+          value={updateIdLocation}
+          onChange={(e) => setUpdateIdLocation(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="New Location Name"
+          value={updateNameLocation}
+          onChange={(e) => setUpdateNameLocation(e.target.value)}
+        />
+        <button className="btn" onClick={handleUpdateLocation}>Update Location</button>
+      </div>
 
       {/* Display Aircrafts */}
-      <h2>Aircrafts</h2>
-      <ul>
-        {aircrafts.map((aircraft) => (
-          <li key={aircraft.id}>
-            {aircraft.id}: {aircraft.type}
-            <button onClick={() => handleDeleteAircraft(aircraft.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <div className="section">
+        <h2>Aircrafts</h2>
+        <ul>
+          {aircrafts.map((aircraft) => (
+            <li key={aircraft.id}>
+              {aircraft.id}: {aircraft.type}
+              <button className="delete-btn" onClick={() => handleDeleteAircraft(aircraft.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {/* Add New Aircraft */}
-      <h2>Add Aircraft</h2>
-      <input
-        type="text"
-        placeholder="Aircraft ID"
-        value={idAircraft}
-        onChange={(e) => setIdAircraft(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Aircraft Type"
-        value={typeAircraft}
-        onChange={(e) => setTypeAircraft(e.target.value)}
-      />
-      <button onClick={handleAddAircraft}>Add Aircraft</button>
+      <div className="section">
+        <h2>Add Aircraft</h2>
+        <input
+          type="text"
+          placeholder="Aircraft ID"
+          value={idAircraft}
+          onChange={(e) => setIdAircraft(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Aircraft Type"
+          value={typeAircraft}
+          onChange={(e) => setTypeAircraft(e.target.value)}
+        />
+        <button className="btn" onClick={handleAddAircraft}>Add Aircraft</button>
+      </div>
 
       {/* Update Aircraft */}
-      <h2>Update Aircraft</h2>
-      <input
-        type="text"
-        placeholder="Aircraft ID"
-        value={updateIdAircraft}
-        onChange={(e) => setUpdateIdAircraft(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="New Aircraft Type"
-        value={updateTypeAircraft}
-        onChange={(e) => setUpdateTypeAircraft(e.target.value)}
-      />
-      <button onClick={handleUpdateAircraft}>Update Aircraft</button>
+      <div className="section">
+        <h2>Update Aircraft</h2>
+        <input
+          type="text"
+          placeholder="Aircraft ID"
+          value={updateIdAircraft}
+          onChange={(e) => setUpdateIdAircraft(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="New Aircraft Type"
+          value={updateTypeAircraft}
+          onChange={(e) => setUpdateTypeAircraft(e.target.value)}
+        />
+        <button className="btn" onClick={handleUpdateAircraft}>Update Aircraft</button>
+      </div>
     </div>
   );
 };

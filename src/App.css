@@ -1,38 +1,110 @@
-.App {
+/* Basic Styling */
+.app-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+h1 {
   text-align: center;
+  color: #333;
+  margin-bottom: 40px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h2 {
+  color: #444;
+  margin-top: 30px;
+  font-size: 24px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.section {
+  margin-top: 20px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  border-radius: 5px;
+}
+
+button {
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Delete button (Red) */
+.delete-btn {
+  background-color: red;
   color: white;
+  transition: background-color 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+.delete-btn:hover {
+  background-color: darkred;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Add button (Blue) */
+.btn {
+  background-color: #007BFF;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+/* Update button (Green) */
+.update-btn {
+  background-color: #28a745;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+.update-btn:hover {
+  background-color: #218838;
+}
+
+/* Input fields */
+input[type="text"] {
+  padding: 12px;
+  margin: 8px 0;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+button, input[type="text"] {
+  margin-right: 10px;
+}
+
+button:focus, input[type="text"]:focus {
+  outline: none;
+}
+
+/* Margin between sections */
+.section {
+  margin-bottom: 30px;
 }
