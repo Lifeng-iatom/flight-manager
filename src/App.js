@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
+// Use environment variable for the API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 const App = () => {
   const [locations, setLocations] = useState([]);
   const [aircrafts, setAircrafts] = useState([]);
@@ -13,12 +16,10 @@ const App = () => {
   const [updateNameLocation, setUpdateNameLocation] = useState('');
   const [updateIdAircraft, setUpdateIdAircraft] = useState('');
   const [updateTypeAircraft, setUpdateTypeAircraft] = useState('');
-  const [deleteIdLocation, setDeleteIdLocation] = useState('');
-  const [deleteIdAircraft, setDeleteIdAircraft] = useState('');
 
   // Fetch all locations
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/locations')
+    axios.get(`${API_BASE_URL}/api/locations`)
       .then((response) => {
         setLocations(response.data);
       })
@@ -29,7 +30,7 @@ const App = () => {
 
   // Fetch all aircrafts
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/aircrafts')
+    axios.get(`${API_BASE_URL}/api/aircrafts`)
       .then((response) => {
         setAircrafts(response.data);
       })
@@ -38,14 +39,14 @@ const App = () => {
       });
   }, []);
 
-  // Insert a new location
+  // Add a new location
   const handleAddLocation = () => {
     if (!idLocation || !nameLocation) {
       alert("Please provide both ID and Name of Location.");
       return;
     }
 
-    axios.post('http://127.0.0.1:5000/api/location', {
+    axios.post(`${API_BASE_URL}/api/location`, {
       id: idLocation,
       name: nameLocation,
     })
@@ -60,14 +61,14 @@ const App = () => {
       });
   };
 
-  // Insert a new aircraft
+  // Add a new aircraft
   const handleAddAircraft = () => {
     if (!idAircraft || !typeAircraft) {
       alert("Please provide both ID and Type of Aircraft.");
       return;
     }
 
-    axios.post('http://127.0.0.1:5000/api/aircraft', {
+    axios.post(`${API_BASE_URL}/api/aircraft`, {
       id: idAircraft,
       type: typeAircraft,
     })
@@ -89,7 +90,7 @@ const App = () => {
       return;
     }
 
-    axios.put(`http://127.0.0.1:5000/api/location/${updateIdLocation}`, {
+    axios.put(`${API_BASE_URL}/api/location/${updateIdLocation}`, {
       name: updateNameLocation,
     })
       .then((response) => {
@@ -112,7 +113,7 @@ const App = () => {
       return;
     }
 
-    axios.put(`http://127.0.0.1:5000/api/aircraft/${updateIdAircraft}`, {
+    axios.put(`${API_BASE_URL}/api/aircraft/${updateIdAircraft}`, {
       type: updateTypeAircraft,
     })
       .then((response) => {
@@ -130,7 +131,7 @@ const App = () => {
 
   // Delete a location
   const handleDeleteLocation = (id) => {
-    axios.delete(`http://127.0.0.1:5000/api/location/${id}`)
+    axios.delete(`${API_BASE_URL}/api/location/${id}`)
       .then((response) => {
         alert(response.data.message);
         setLocations(locations.filter(location => location.id !== id));
@@ -142,7 +143,7 @@ const App = () => {
 
   // Delete an aircraft
   const handleDeleteAircraft = (id) => {
-    axios.delete(`http://127.0.0.1:5000/api/aircraft/${id}`)
+    axios.delete(`${API_BASE_URL}/api/aircraft/${id}`)
       .then((response) => {
         alert(response.data.message);
         setAircrafts(aircrafts.filter(aircraft => aircraft.id !== id));

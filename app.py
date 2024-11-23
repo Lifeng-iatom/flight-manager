@@ -3,9 +3,16 @@ from flask_cors import CORS
 import mysql.connector
 import os
 from dotenv import load_dotenv
+import time
 
 # Load environment variables
 load_dotenv()
+
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST')
+DB_NAME = os.getenv('DB_NAME')
+print(DB_USER)
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
@@ -13,14 +20,33 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 # MySQL connection setup
 def create_connection():
     config = {
-        'user': 'root',
-        'password': '111111',
-        'host': 'localhost',
-        'database': 'exampleDB',
+        'user': DB_USER,
+        'password': DB_PASSWORD,
+        'host': DB_HOST,
+        'database': DB_NAME,
         'raise_on_warnings': True,
         'ssl_disabled': True
     }
     return mysql.connector.connect(**config)
+
+def check_mysql_connection():
+    try:
+        conn = create_connection()
+        conn.close()
+        print("MySQL is connected.")
+        return True
+    except mysql.connector.Error as err:
+        print(f"MySQL Error: {err}")
+        return False
+
+
+def wait_for_mysql():
+    while not check_mysql_connection():
+        print("Waiting for MySQL to be available...")
+        time.sleep(5)
+
+
+wait_for_mysql()
 
 @app.route('/')
 def home():
