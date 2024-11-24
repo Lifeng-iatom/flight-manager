@@ -3,9 +3,50 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: .  # Build the frontend from the root folder
+      dockerfile: Dockerfile  # Path to the Dockerfile for the frontend
     ports:
-      - "3000:80"
+      - "80:80"  # Expose frontend on port 80
     environment:
-      - REACT_APP_API_URL=http://localhost:5000
+      - REACT_APP_API_URL=${REACT_APP_API_URL}  # Use environment variable from .env
+    networks:
+      - app-network
+    depends_on:
+      - backend  # Ensure backend is ready before starting frontend
+
+  backend:
+    build:
+      context: ./backend  # Build the backend from the 'backend' folder
+    ports:
+      - "5000:5000"  # Expose Flask backend on port 5000
+    environment:
+      - MYSQL_HOST=${DB_HOST}  # Pass MySQL host from .env
+      - MYSQL_USER=${DB_USER}  # Pass MySQL user from .env
+      - MYSQL_PASSWORD=${DB_PASSWORD}  # Pass MySQL password from .env
+      - MYSQL_DB=${DB_NAME}  # Pass MySQL database name from .env
+      - FLASK_APP=${FLASK_APP}  # Flask app file from .env
+      - FLASK_RUN_HOST=0.0.0.0  # Flask listens on all interfaces
+      - FLASK_ENV=${FLASK_ENV}  # Flask environment (development/production)
+    networks:
+      - app-network
+    depends_on:
+      - mysql  # Wait for MySQL to be ready before starting the backend
+
+  mysql:
+    image: mysql:8.0  # Use MySQL 8.0 image
+    environment:
+      MYSQL_ROOT_PASSWORD=${DB_PASSWORD}  # Root password from .env
+      MYSQL_DATABASE=${DB_NAME}  # Database name from .env
+      MYSQL_USER=${DB_USER}  # MySQL user from .env
+      MYSQL_PASSWORD=${DB_PASSWORD}  # MySQL user password from .env
+    ports:
+      - "3306:3306"  # Expose MySQL on port 3306
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:  # Persistent volume for MySQL data
+
+networks:
+  app-network:
+    driver: bridge  # Use the bridge network driver for communication

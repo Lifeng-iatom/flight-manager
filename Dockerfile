@@ -1,19 +1,29 @@
-FROM node:16-alpine AS build
+# Dockerfile for Frontend (React app)
 
+# Use a Node.js image as base
+FROM node:18.19.1-alpine
+
+# Set working directory
 WORKDIR /app
 
-COPY flightmanager-app/package.json flightmanager-app/package-lock.json ./
-
+# Copy frontend files into the container
+COPY ./package.json ./package-lock.json /app/
 RUN npm install
 
-COPY flightmanager-app ./
+# Copy the rest of the frontend files
+COPY ./ /app/
 
+# Build the React app
 RUN npm run build
 
+# Serve the app using nginx
 FROM nginx:alpine
 
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy the build output to Nginx's public folder
+COPY --from=0 /app/build /usr/share/nginx/html
 
+# Expose port 80
 EXPOSE 80
 
+# Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
