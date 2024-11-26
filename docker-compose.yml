@@ -4,49 +4,54 @@ services:
   frontend:
     build:
       context: .  # Build the frontend from the root folder
-      dockerfile: Dockerfile  # Path to the Dockerfile for the frontend
+      dockerfile: Dockerfile  # Dockerfile for the frontend
     ports:
-      - "80:80"  # Expose frontend on port 80
+      - "8080:8080"  # Expose the frontend on port 8080
     environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL}  # Use environment variable from .env
+      - REACT_APP_API_URL=${REACT_APP_API_URL}  # Pass API URL to the frontend
     networks:
       - app-network
     depends_on:
-      - backend  # Ensure backend is ready before starting frontend
+      - backend  # Ensure backend starts before frontend
 
   backend:
     build:
       context: ./backend  # Build the backend from the 'backend' folder
+      dockerfile: Dockerfile  # Use the backend Dockerfile
     ports:
-      - "5000:5000"  # Expose Flask backend on port 5000
+      - "5001:5000"  # Expose the Flask backend on port 5000
     environment:
-      - MYSQL_HOST=${DB_HOST}  # Pass MySQL host from .env
-      - MYSQL_USER=${DB_USER}  # Pass MySQL user from .env
-      - MYSQL_PASSWORD=${DB_PASSWORD}  # Pass MySQL password from .env
-      - MYSQL_DB=${DB_NAME}  # Pass MySQL database name from .env
-      - FLASK_APP=${FLASK_APP}  # Flask app file from .env
-      - FLASK_RUN_HOST=0.0.0.0  # Flask listens on all interfaces
-      - FLASK_ENV=${FLASK_ENV}  # Flask environment (development/production)
+      - MYSQL_HOST=${DB_HOST}  # MySQL host from .env
+      - MYSQL_USER=${DB_USER}  # MySQL user from .env
+      - MYSQL_PASSWORD=${DB_PASSWORD}  # MySQL password from .env
+      - MYSQL_DB=${DB_NAME}  # MySQL database name from .env
+      - FLASK_APP=app.py  # Specify the Flask app file
+      - FLASK_RUN_HOST=0.0.0.0  # Listen on all interfaces
+      - FLASK_ENV=development  # Development mode for Flask
     networks:
       - app-network
     depends_on:
-      - mysql  # Wait for MySQL to be ready before starting the backend
+      - mysql  # Ensure MySQL starts before backend
 
   mysql:
     image: mysql:8.0  # Use MySQL 8.0 image
+    container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD=${DB_PASSWORD}  # Root password from .env
-      MYSQL_DATABASE=${DB_NAME}  # Database name from .env
-      MYSQL_USER=${DB_USER}  # MySQL user from .env
-      MYSQL_PASSWORD=${DB_PASSWORD}  # MySQL user password from .env
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}  # Root password from .env
+      - MYSQL_DATABASE=${DB_NAME}  # Database name from .env
+      - MYSQL_USER=${DB_USER}  # MySQL user from .env
+      - MYSQL_PASSWORD=${DB_PASSWORD}  # MySQL user password from .env
     ports:
-      - "3306:3306"  # Expose MySQL on port 3306
+      - "3305:3306"  # Expose MySQL on port 3306
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persistent data storage
     networks:
       - app-network
 
 volumes:
-  mysql_data:  # Persistent volume for MySQL data
+  mysql_data:
+    driver: local  # Use a local volume for MySQL data
 
 networks:
   app-network:
-    driver: bridge  # Use the bridge network driver for communication
+    driver: bridge  # Use the bridge network for container communication
