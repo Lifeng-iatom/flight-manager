@@ -1,4 +1,4 @@
 Flask==3.0.2
 mysql-connector-python==8.0.15
-flask_cors==3.0.10
+flask_cors
 python-dotenv==0.21.1

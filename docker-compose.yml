@@ -6,7 +6,7 @@ services:
       context: .  # Build the frontend from the root folder
       dockerfile: Dockerfile  # Dockerfile for the frontend
     ports:
-      - "8080:8080"  # Expose the frontend on port 8080
+      - "3000:80"  # Expose the frontend on port 8080
     environment:
       - REACT_APP_API_URL=${REACT_APP_API_URL}  # Pass API URL to the frontend
     networks:
@@ -19,15 +19,15 @@ services:
       context: ./backend  # Build the backend from the 'backend' folder
       dockerfile: Dockerfile  # Use the backend Dockerfile
     ports:
-      - "5001:5000"  # Expose the Flask backend on port 5000
+      - "5000:5000"  # Expose the Flask backend on port 5000
     environment:
-      - MYSQL_HOST=${DB_HOST}  # MySQL host from .env
-      - MYSQL_USER=${DB_USER}  # MySQL user from .env
-      - MYSQL_PASSWORD=${DB_PASSWORD}  # MySQL password from .env
-      - MYSQL_DB=${DB_NAME}  # MySQL database name from .env
       - FLASK_APP=app.py  # Specify the Flask app file
       - FLASK_RUN_HOST=0.0.0.0  # Listen on all interfaces
       - FLASK_ENV=development  # Development mode for Flask
+      - MYSQL_USER=${DB_USER}  # This should be 'feng' based on the output
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env 
     networks:
       - app-network
     depends_on:
@@ -37,7 +37,7 @@ services:
     image: mysql:8.0  # Use MySQL 8.0 image
     container_name: mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}  # Root password from .env
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}  # Root password from .env
       - MYSQL_DATABASE=${DB_NAME}  # Database name from .env
       - MYSQL_USER=${DB_USER}  # MySQL user from .env
       - MYSQL_PASSWORD=${DB_PASSWORD}  # MySQL user password from .env
@@ -47,6 +47,13 @@ services:
       - mysql_data:/var/lib/mysql  # Persistent data storage
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysql", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}", "-h", "localhost", "-e", "SELECT 1;"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
 
 volumes:
   mysql_data:
