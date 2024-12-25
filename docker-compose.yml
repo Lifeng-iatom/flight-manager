@@ -26,6 +26,7 @@ services:
       - FLASK_ENV=development  # Development mode for Flask
       - MYSQL_USER=${DB_USER}  # This should be 'feng' based on the output
       - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_HOST=${DB_HOST}
     env_file:
       - .env 
     networks:
@@ -45,10 +46,11 @@ services:
       - "3305:3306"  # Expose MySQL on port 3306
     volumes:
       - mysql_data:/var/lib/mysql  # Persistent data storage
+      - ./exampledb_dump.sql:/docker-entrypoint-initdb.d/exampledb_dump.sql
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "mysql", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}", "-h", "localhost", "-e", "SELECT 1;"]
+      test: ["CMD", "mysql", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}", "-h", "mysql", "-e", "SELECT 1;"]
       interval: 10s
       retries: 5
       start_period: 30s
