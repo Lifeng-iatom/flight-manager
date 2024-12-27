@@ -1,6 +1,11 @@
 # Backend Dockerfile
 FROM python:3.9-slim
 
+# Install dependencies and MySQL client
+RUN apt-get update && \
+    apt-get install -y \
+    default-mysql-client \
+    && rm -rf /var/lib/apt/lists/*
 # Set working directory
 WORKDIR /app
 

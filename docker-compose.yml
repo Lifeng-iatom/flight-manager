@@ -31,32 +31,6 @@ services:
       - .env 
     networks:
       - app-network
-    depends_on:
-      - mysql  # Ensure MySQL starts before backend
-
-  mysql:
-    image: mysql:8.0  # Use MySQL 8.0 image
-    container_name: mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}  # Root password from .env
-      - MYSQL_DATABASE=${DB_NAME}  # Database name from .env
-      - MYSQL_USER=${DB_USER}  # MySQL user from .env
-      - MYSQL_PASSWORD=${DB_PASSWORD}  # MySQL user password from .env
-    ports:
-      - "3305:3306"  # Expose MySQL on port 3306
-    volumes:
-      - mysql_data:/var/lib/mysql  # Persistent data storage
-      - ./exampledb_dump.sql:/docker-entrypoint-initdb.d/exampledb_dump.sql
-      - ./init-mysql.sh:/docker-entrypoint-initdb.d/init-mysql.sh
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD", "mysql", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}", "-h", "mysql", "-e", "SELECT 1;"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
-
 
 volumes:
   mysql_data:
